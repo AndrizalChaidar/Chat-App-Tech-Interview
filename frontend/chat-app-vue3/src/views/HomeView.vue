@@ -2,7 +2,7 @@
 import ChatHeader from '@/components/ChatHeader.vue'
 import ChatList from '@/components/ChatList.vue'
 import ChatInput from '@/components/ChatInput.vue'
-import { onMounted, ref, watch, computed } from 'vue'
+import { onMounted, ref, watch, onBeforeUnmount } from 'vue'
 import { v4 } from 'uuid'
 
 const userId = ref<string>()
@@ -27,6 +27,10 @@ onMounted(async () => {
     }
     chats.value = await res.json()
   }
+})
+onBeforeUnmount(() => {
+  socket.removeEventListener('message', () => {})
+  socket.close()
 })
 </script>
 
